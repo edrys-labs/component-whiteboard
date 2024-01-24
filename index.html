@@ -1,44 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-    <meta name="description" content="Live whiteboard module based on Excalidraw" />
+
+    <meta
+      name="description"
+      content="Live whiteboard module based on Excalidraw"
+    />
     <meta name="show-in" content="*" />
     <title>Live Whiteboard</title>
-  
+
     <script src="https://cross-lab-project.github.io/edrys-Lite/module/edrys.js"></script>
- 
-    <script defer src="https://cross-lab-project.github.io/edrys-Lite/module/vendor/alpine.min.js"></script>
-</head>
 
-<body>
-    <template x-if="!!edrys && !!url" x-data="{ edrys: undefined, url: undefined }" 
-              x-init="Edrys.onUpdate((e) => { 
-                            edrys = {...e} 
-                            let room = encodeURIComponent(edrys.liveRoom.name).replace(/[\W_]+/g, '')
-                            let key = 'x' + edrys.class_id
-                            url = `https://excalidraw.com/#room=edrys-${room}-${edrys.class_id},${key}` 
-                      })">
+    <script
+      defer
+      src="https://cross-lab-project.github.io/edrys-Lite/module/vendor/alpine.min.js"
+    ></script>
+  </head>
 
-        <iframe :src="url" frameborder="0" style="width:100%;height:100%;"></iframe>
+  <body>
+    <template
+      x-if="!!edrys && !!url"
+      x-data="{ edrys: undefined, url: undefined }"
+      x-init="Edrys.onUpdate((e) => { 
+                edrys = {...e} 
+                let room = encodeURIComponent(edrys.liveRoom.name).replace(/[\W_]+/g, '')
+                            
+                let hashValue = async (val) => {
+                  const encoder = new TextEncoder();
+                  const data = encoder.encode(val);
+                  const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+                  const hashArray = Array.from(new Uint8Array(hashBuffer));
+                  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                  return hashHex.substring(0, 22);
+                }
+                           
+                hashValue(edrys.class_id + room).then((key) => {
+                  url = `https://excalidraw.com/#room=${edrys.class_id}-${room},${key}`
+                });
+              })"
+    >
+      <iframe
+        :src="url"
+        frameborder="0"
+        sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation allow-popups"
+        style="width: 100%; height: 100%"
+      ></iframe>
     </template>
 
     <style>
-        body, html, iframe {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            overflow: hidden;
-        }
+      body,
+      html,
+      iframe {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overflow: hidden;
+      }
     </style>
-</body>
+  </body>
 </html>
-    
-    
