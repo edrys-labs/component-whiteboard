@@ -7,7 +7,7 @@ This module adds a live whiteboard to Edrys (every room has its own whiteboard).
 Simply add this URL to your class modules:
 
 ```
-https://edrys-org.github.io/module-whiteboard/
+https://edrys-labs.github.io/module-whiteboard/
 ```
 
 ## Development
