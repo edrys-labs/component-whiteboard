@@ -1,4 +1,4 @@
-# Edrys Whiteboard Module
+# Edrys Whiteboard Component
 
 This module adds a live whiteboard to Edrys (every room has its own whiteboard). It is based on [Excalidraw](https://excalidraw.com).
  
